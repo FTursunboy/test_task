@@ -20,7 +20,7 @@ class AuthService {
             'last_name' => $data['last_name'],
             'patronymic' => $data['patronymic'],
             'gender' => $data['gender'],
-            'avatar_img' => "fsdaf",
+            'avatar_img' => $this->storeAvatar($data['avatar_img']),
             'login' => $data['login'],
             'password' => Hash::make($data['password']),
             'email' => $data['email'],
@@ -28,6 +28,7 @@ class AuthService {
         ]);
 
         SendEmailJob::dispatch($user, $password);
+
 
         return $user;
 
