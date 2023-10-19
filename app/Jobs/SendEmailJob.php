@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\SendAdmin;
+
 use App\Mail\SendUserLoginMail;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
