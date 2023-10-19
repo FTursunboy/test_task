@@ -9,20 +9,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendUserLoginMail extends Mailable
+class TaskNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private string $login;
-    private string $password;
+    private string $title;
+    private string $text;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $login, string $password)
+    public function __construct(string $title, string $text)
     {
-        $this->login = $login;
-        $this->password = $password;
+        $this->title = $title;
+        $this->text = $text;
     }
 
     /**
@@ -31,7 +31,7 @@ class SendUserLoginMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send User Login Mail',
+            subject: 'Send TaskNotification Mail',
         );
     }
 
@@ -41,10 +41,10 @@ class SendUserLoginMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.send_login',
+            view: 'emails.notification_task',
             with: [
-                'login' => $this->login,
-                'pasword' => $this->password,
+                'title' => $this->title,
+                'text' => $this->text,
             ]
         );
     }

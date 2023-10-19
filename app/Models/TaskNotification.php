@@ -10,7 +10,10 @@ class TaskNotification extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = false;
+
     public function user() {
-        $this->belongsTo(User::class);
+       return $this->belongsTo(User::class, 'user_id');
     }
+
 }

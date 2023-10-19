@@ -13,6 +13,8 @@ class AuthService {
 
     public function authenticate(array $data) : User {
 
+        $password = $data['password'];
+
         $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -25,13 +27,14 @@ class AuthService {
             'birth_date' => $data['birth_date']
         ]);
 
-       SendEmailJob::dispatch($user);
+        SendEmailJob::dispatch($user, $password);
+
 
         return $user;
 
     }
 
-    private function storeAvatar($avatarData)
+    private function storeAvatar($avatarData) : ?string
     {
         if (!$avatarData) {
             return null;

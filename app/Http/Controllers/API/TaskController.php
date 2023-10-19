@@ -7,6 +7,8 @@ use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Services\TaskService;
 use App\Models\TaskNotification;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -18,10 +20,18 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function store(TaskRequest $request) {
+    public function store(TaskRequest $request, int $id) : JsonResponse {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'message' => true,
+                'info' => 'Такого полӣзовтеля не существует'
+            ]);
+        }
+
         $data = $request->validated();
 
-        $task = $this->taskService->store($data);
+        $task = $this->taskService->store($data, $user);
 
         return response()->json([
             'message' => true,
@@ -30,11 +40,11 @@ class TaskController extends Controller
     }
 
 
-    public function update(TaskRequest $request, int $id) {
+    public function update(TaskRequest $request, User $user, int $id) : JsonResponse {
         $data = $request->validated();
-        $task = TaskNotification::findOrFail($id);
+        $taskNotification = TaskNotification::findOrFail($id);
 
-        $task = $this->taskService->update($data, $task);
+        $task = $this->taskService->update($data, $user, $taskNotification);
 
         return response()->json([
             'task' => new TaskResource($task),
@@ -42,12 +52,19 @@ class TaskController extends Controller
         ]);
     }
 
-    public function delete(int $id) {
+    public function show(TaskNotification $task) : JsonResponse {
+        return response()->json([
+            'task' => new TaskResource($task),
+            'result' => true
+        ]);
+    }
+
+    public function delete(int $id) :JsonResponse {
         $task = TaskNotification::findOrFail($id);
 
         $task->delete();
 
-        return redirect()->json([
+        return response()->json([
             'message' => true
         ]);
     }

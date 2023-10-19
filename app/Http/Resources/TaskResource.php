@@ -15,29 +15,48 @@ class TaskResource extends JsonResource
      */
 
 
-
     public function toArray(Request $request): array
     {
+        $daysOfWeek = [
+            1 => 'Понедельник',
+            2 => 'Вторник',
+            3 => 'Среда',
+            4 => 'Четверг',
+            5 => 'Пятница',
+            6 => 'Суббота',
+            7 => 'Воскресенье',
+        ];
+
+        $convertedDays = array_map(function ($day) use ($daysOfWeek) {
+            return $daysOfWeek[(int)$day];
+        }, json_decode($this->days_of_week));
+
         return [
             'title' => $this->title,
             'text' => $this->text,
-            'user_id' => new UserResource($this->user),
-            'job_time' => $this->time,
-            'days_of_week' => $this->getFormattedDaysOfWeek(),
+            'user_id' => $this->user->first_name,
+            'job_time' => $this->job_time,
+            'days_of_week' => $convertedDays,
         ];
     }
 
     private function getFormattedDaysOfWeek()
     {
-        $daysOfWeek = json_decode($this->days_of_week);
+        $daysOfWeek = $this->days_of_week; // Используем массив напрямую
+
         $formattedDays = [];
 
         foreach ($daysOfWeek as $day) {
-            $formattedDays[] = Carbon::now()->isoWeekday($day)->format('dddd');
+            $carbonDate = Carbon::parse($day);
+            $formattedDays[] = $carbonDate->isoFormat('dddd');
         }
 
         return $formattedDays;
     }
+
+
+
+
 
 
 }

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Отправка Логина</title>
+        <title>Отправка Уведомления</title>
 
 
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,8 +14,8 @@
     </head>
     <body class="antialiased">
         <div>
-            <p>Ваш логиrн: <strong>{{$login}}</strong></p>
-            <p>Ваш пароль: <strong>{{$pasword}}</strong></p>
+            <p>Ваш задача: <strong>{{$title}}</strong></p>
+            <p>Текст: <strong>{{$text}}</strong></p>
         </div>
     </body>
 </html>

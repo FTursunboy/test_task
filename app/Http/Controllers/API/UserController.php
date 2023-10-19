@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Services\UserService;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -18,23 +19,23 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function update(UserRequest $request, User $user) {
+    public function update(UserRequest $request, User $user) : JsonResponse {
         $data  = $request->validated();
 
 
        $user =  $this->userService->update($user, $data);
         return response()->json([
-            'return' => true,
+            'message' => true,
             'user' => new UserResource($user)
         ]);
     }
 
-    public function show(int $id) {
+    public function show(int $id) : JsonResponse {
         $user = User::findOrFail($id);
 
         return response()->json([
             'user' => new UserResource($user),
-            'message' => true
+            'status' => true
         ]);
     }
 

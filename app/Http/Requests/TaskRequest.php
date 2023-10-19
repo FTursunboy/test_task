@@ -24,8 +24,7 @@ class TaskRequest extends FormRequest
         return [
             'title' => 'required|min:3|max:255',
             'text' => 'required',
-            'user_id' => 'required|integer|exists:users,id',
-            'time' => 'required|time',
+            'time' => 'required|date_format:H:i',
             'days_of_week' => 'json'
         ];
     }
